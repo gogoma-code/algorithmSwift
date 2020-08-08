@@ -7,6 +7,3 @@ func solution12918(_ s:String) -> Bool {
     return true
 }
 
-solution12918("123")
-solution12918("123a")
-solution12918("1234")
