@@ -1,4 +1,5 @@
 import SwiftUI
+import Foundation
 
 /// - 문자열 다루기 기본
 /// - https://programmers.co.kr/learn/courses/30/lessons/12918?language=swift
@@ -112,9 +113,8 @@ func solution12919(_ seoul:[String]) -> String {
 
 /// - 핸드폰 번호 가리기
 /// - https://programmers.co.kr/learn/courses/30/lessons/12948?language=swift
-func solution12948(_ phone_number:String) -> String {
+func solution12948_V1(_ phone_number:String) -> String {
     let phone_blind = phone_number.enumerated().map { (idx, val) -> Character in
-        print("\(idx), \(phone_number.count)")
         if idx < phone_number.count-4 {
             return "*"
         } else {
@@ -124,6 +124,10 @@ func solution12948(_ phone_number:String) -> String {
     
     return String(phone_blind)
 }
+func solution12948_V2(_ phone_number:String) -> String {
+    return String("\(String(repeating: "*", count: phone_number.count - 4))\(phone_number.suffix(4))")
+}
+
 
 /// - 자연수 뒤집어 배열로 만들기
 /// - https://programmers.co.kr/learn/courses/30/lessons/12932?language=swift
@@ -177,5 +181,55 @@ func solution12954_V2(_ x:Int, _ n:Int) -> [Int64] {
 /// - https://programmers.co.kr/learn/courses/30/lessons/12944?language=swift
 func solution12944(_ arr:[Int]) -> Double {
     return Double(arr.reduce(0, {$0 + $1})) / Double(arr.count)
+}
+
+/// - 문자열 내림차순으로 배치하기
+/// - https://programmers.co.kr/learn/courses/30/lessons/12917?language=swift
+func solution12917(_ s:String) -> String {
+    return String(s.sorted { $0 > $1 })
+}
+
+/// - 정수 제곱근 판별
+/// - https://programmers.co.kr/learn/courses/30/lessons/12934?language=swift
+func solution12934_V1(_ n:Int64) -> Int64 {
+    let nSqrt: Double = sqrt(Double(n))
+    return nSqrt - nSqrt.rounded() == 0 ? Int64(pow(nSqrt+1, 2)) : -1
+}
+func solution12934_V2(_ n:Int64) -> Int64 {
+    let nSqrt: Int64 = Int64(sqrt(Double(n)))
+    return nSqrt * nSqrt == n ? (nSqrt+1) * (nSqrt+1) : -1
+}
+
+/// - 직사각형 별찍기
+/// - https://programmers.co.kr/learn/courses/30/lessons/12969?language=swift
+/*
+let n = readLine()!.components(separatedBy: [" "]).map { Int($0)! }
+let (a, b) = (n[0], n[1])
+
+for _ in 0..<b {
+    for _ in 0..<a {
+        print("*", terminator: "")
+    }
+    print()
+}
+ 
+for _ in 0..<b {
+ print(String((0..<a).map { _ in "*" }))
+}
+*/
+
+/// - 행렬의 덧셈
+/// - https://programmers.co.kr/learn/courses/30/lessons/12950?language=swift
+func solution12950_V1(_ arr1:[[Int]], _ arr2:[[Int]]) -> [[Int]] {
+    var arr: [[Int]] = Array(repeating: Array(repeating: 0, count: arr1[0].count), count: arr1.count)
+    for i in 0..<arr1.count {
+        for j in 0..<arr1[0].count {
+            arr[i][j] = arr1[i][j] + arr2[i][j]
+        }
+    }
+    return arr
+}
+func solution12950_V2(_ arr1:[[Int]], _ arr2:[[Int]]) -> [[Int]] {
+    return zip(arr1, arr2).map{zip($0, $1).map{$0+$1}}
 }
 
