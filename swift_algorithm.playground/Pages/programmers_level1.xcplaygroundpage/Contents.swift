@@ -98,3 +98,84 @@ func solution12922_V2(_ n:Int) -> String {
     let answer: String = (0..<n/2).map { _ in "수박" }.reduce("", +)
     return n % 2 == 0 ? answer : answer + "수"
 }
+
+/// - 서울에서 김서방 찾기
+/// - https://programmers.co.kr/learn/courses/30/lessons/12919?language=swift
+func solution12919(_ seoul:[String]) -> String {
+    var answer: String = ""
+    if let index = seoul.firstIndex(of: "Kim") {
+        answer =  "김서방은 \(index)에 있다"
+    }
+    
+    return answer
+}
+
+/// - 핸드폰 번호 가리기
+/// - https://programmers.co.kr/learn/courses/30/lessons/12948?language=swift
+func solution12948(_ phone_number:String) -> String {
+    let phone_blind = phone_number.enumerated().map { (idx, val) -> Character in
+        print("\(idx), \(phone_number.count)")
+        if idx < phone_number.count-4 {
+            return "*"
+        } else {
+            return val
+        }
+    }
+    
+    return String(phone_blind)
+}
+
+/// - 자연수 뒤집어 배열로 만들기
+/// - https://programmers.co.kr/learn/courses/30/lessons/12932?language=swift
+func solution12932_V1(_ n:Int64) -> [Int] {
+    return String(String(n).reversed()).map { (c: Character) -> Int in
+        return Int(String(c))!
+    }
+}
+func solution12932_V2(_ n:Int64) -> [Int] {
+    return String(n).compactMap { $0.hexDigitValue }.reversed()
+}
+func solution12932_V3(_ n:Int64) -> [Int] {
+    var intAry: [Int] = []
+    var tmpN: Int = Int(n)
+    while tmpN != 0 {
+        intAry.append(tmpN % 10)
+        tmpN /= 10
+    }
+    return intAry
+}
+
+/// - 제일 작은 수 제거하기
+/// - https://programmers.co.kr/learn/courses/30/lessons/12935?language=swift
+func solution12935(_ arr:[Int]) -> [Int] {
+    var returnAry = arr
+    var min: Int = Int.max
+    for number in returnAry {
+        if min > number {
+            min = number
+        }
+    }
+    
+    returnAry.remove(at: returnAry.firstIndex(of: min)!)
+    return returnAry.isEmpty ? [-1] : returnAry
+}
+
+/// - x만큼 간격이 있는 n개의 숫자
+/// - https://programmers.co.kr/learn/courses/30/lessons/12954?language=swift
+func solution12954_V1(_ x:Int, _ n:Int) -> [Int64] {
+    var returnAry: [Int64] = []
+    for i in 0..<n {
+        returnAry.append(Int64(x + (i*x)))
+    }
+    return returnAry
+}
+func solution12954_V2(_ x:Int, _ n:Int) -> [Int64] {
+    return (1...n).map { Int64(x * $0) }
+}
+
+/// - 평균 구하기
+/// - https://programmers.co.kr/learn/courses/30/lessons/12944?language=swift
+func solution12944(_ arr:[Int]) -> Double {
+    return Double(arr.reduce(0, {$0 + $1})) / Double(arr.count)
+}
+
