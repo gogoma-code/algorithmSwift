@@ -302,3 +302,9 @@ func solution12943(_ num:Int) -> Int {
     }
     return count < 500 ? count : -1
 }
+
+/// - 하샤드 수
+/// - https://programmers.co.kr/learn/courses/30/lessons/12947?language=swift
+func solution12947(_ x:Int) -> Bool {
+    return x % String(x).map { Int(String($0))! }.reduce(0, +) == 0
+}
