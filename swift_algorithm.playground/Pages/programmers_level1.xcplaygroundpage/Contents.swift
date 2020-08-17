@@ -233,3 +233,72 @@ func solution12950_V2(_ arr1:[[Int]], _ arr2:[[Int]]) -> [[Int]] {
     return zip(arr1, arr2).map{zip($0, $1).map{$0+$1}}
 }
 
+/// - 최대공약수와 최소공배수
+/// - https://programmers.co.kr/learn/courses/30/lessons/12940?language=swift
+func solution12940_V1(_ n:Int, _ m:Int) -> [Int] {
+    return [gcd(n,m), lcm(n,m)]
+}
+func gcd(_ n:Int, _ m:Int) -> Int {
+    return m == 0 ? n : gcd(m, n % m)
+}
+func lcm(_ n:Int, _ m:Int) -> Int {
+    return n * m / gcd(n, m)
+}
+func solution12940_V2(_ n:Int, _ m:Int) -> [Int] {
+    var a: Int = n
+    var b: Int = m
+    var temp: Int = 0
+    while b > 0 {
+        temp = b
+        b = a % b
+        a = temp
+    }
+    let gcd: Int = a
+    let lcm: Int = n * m / gcd
+    
+    return [gcd, lcm]
+}
+func solution12940_V3(_ n:Int, _ m:Int) -> [Int] {
+    var gcd: Int = 1
+    for index in 1...min(n, m) {
+        if n % index == 0 && m % index == 0 {
+            gcd = index
+        }
+    }
+    
+    return [gcd, n * m / gcd]
+}
+
+/// - 약수의 합
+/// - https://programmers.co.kr/learn/courses/30/lessons/12928?language=swift
+func solution12928_V1(_ n:Int) -> Int {
+    if n == 0 { return 0 }
+    return (1...n).filter { n % $0 == 0 }.reduce(0, +)
+}
+func solution12928_V2(_ n:Int) -> Int {
+    var sum: Int = 0
+    if n != 0 {
+        for index in 1...n {
+            if n % index == 0 {
+                sum += index
+            }
+        }
+    }
+    return sum
+}
+
+/// - 콜라츠 추측
+/// - https://programmers.co.kr/learn/courses/30/lessons/12943?language=swift
+func solution12943(_ num:Int) -> Int {
+    var count: Int = 0
+    var numTemp: Int = num
+    while numTemp != 1 && count <= 500{
+        if numTemp.isMultiple(of: 2) {
+            numTemp /= 2
+        } else {
+            numTemp = numTemp * 3 + 1
+        }
+        count += 1
+    }
+    return count < 500 ? count : -1
+}
