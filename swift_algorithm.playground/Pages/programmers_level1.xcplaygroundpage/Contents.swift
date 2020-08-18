@@ -236,13 +236,13 @@ func solution12950_V2(_ arr1:[[Int]], _ arr2:[[Int]]) -> [[Int]] {
 /// - 최대공약수와 최소공배수
 /// - https://programmers.co.kr/learn/courses/30/lessons/12940?language=swift
 func solution12940_V1(_ n:Int, _ m:Int) -> [Int] {
-    return [gcd(n,m), lcm(n,m)]
+    return [gcd12940(n,m), lcm12940(n,m)]
 }
-func gcd(_ n:Int, _ m:Int) -> Int {
-    return m == 0 ? n : gcd(m, n % m)
+func gcd12940(_ n:Int, _ m:Int) -> Int {
+    return m == 0 ? n : gcd12940(m, n % m)
 }
-func lcm(_ n:Int, _ m:Int) -> Int {
-    return n * m / gcd(n, m)
+func lcm12940(_ n:Int, _ m:Int) -> Int {
+    return n * m / gcd12940(n, m)
 }
 func solution12940_V2(_ n:Int, _ m:Int) -> [Int] {
     var a: Int = n
@@ -308,3 +308,80 @@ func solution12943(_ num:Int) -> Int {
 func solution12947(_ x:Int) -> Bool {
     return x % String(x).map { Int(String($0))! }.reduce(0, +) == 0
 }
+
+/// - 소수 찾기
+/// - https://programmers.co.kr/learn/courses/30/lessons/12921?language=swift
+func solution12921(_ n:Int) -> Int {
+    var primes: [Bool] = [Bool](repeating: true, count: n+1)
+    primes[1] = false
+    
+    for i in 2...n {
+        var j: Int = 2
+        while i*j <= n {
+            primes[i*j] = false
+            j += 1
+        }
+    }
+    
+    return primes.filter{ $0 }.count - 1
+}
+
+/// - 예산
+/// - https://programmers.co.kr/learn/courses/30/lessons/12982?language=swift
+func solution12982(_ d:[Int], _ budget:Int) -> Int {
+    var sum = 0
+    let count = d.sorted().filter {
+        sum += $0
+        return sum <= budget
+    }.count
+    
+    return count
+}
+
+/// - K번째수
+/// - https://programmers.co.kr/learn/courses/30/lessons/42748?language=swift
+func solution42748_V1(_ array:[Int], _ commands:[[Int]]) -> [Int] {
+    var answer: [Int] = []
+    for i in 0..<commands.count {
+        answer.append(array[(commands[i][0]-1)...(commands[i][1]-1)].sorted()[commands[i][2]-1])
+    }
+    
+    return answer
+}
+func solution42748_V2(_ array:[Int], _ commands:[[Int]]) -> [Int] {
+    return commands.map{ array[($0[0]-1)...($0[1]-1)].sorted()[$0[2]-1] }
+}
+
+/// - 모의고사
+/// - https://programmers.co.kr/learn/courses/30/lessons/42840?language=swift
+func solution42840(_ answers:[Int]) -> [Int] {
+    let supo1: [Int] = [1, 2, 3, 4, 5]
+    let supo2: [Int] = [2, 1, 2, 3, 2, 4, 2, 5]
+    let supo3: [Int] = [3, 3, 1, 1, 2, 2, 4, 4, 5, 5]
+    
+    var supoAry: [Int] = [0, 0, 0]
+    
+    for i in 0..<answers.count {
+        if answers[i] == supo1[i%5] { supoAry[0] = supoAry[0] + 1 }
+        if answers[i] == supo2[i%8] { supoAry[1] = supoAry[1] + 1 }
+        if answers[i] == supo3[i%10] { supoAry[2] = supoAry[2] + 1 }
+    }
+    
+    let supoAryTuple: [(Int, Int)] = supoAry.enumerated().map { ($0+1, $1) }.sorted { $0.1 > $1.1 }
+    let compareNum: Int = supoAryTuple[0].1
+    
+    return supoAryTuple.filter{ compareNum == $0.1 }.map { $0.0 }
+}
+
+/// - 2016년
+/// - https://programmers.co.kr/learn/courses/30/lessons/12901?language=swift
+func solution12901(_ a:Int, _ b:Int) -> String {
+    let dayOfMonth: [Int] = [31,29,31,30,31,30,31,31,30,31,30,31]
+    let weeks: [String] = ["SUN","MON","TUE","WED","THU","FRI","SAT"]
+    let sumOfDay: Int = dayOfMonth[0..<a-1].reduce(0, +) + b + 4
+    print(sumOfDay)
+    
+    return weeks[sumOfDay % 7]
+}
+
+
