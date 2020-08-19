@@ -384,4 +384,135 @@ func solution12901(_ a:Int, _ b:Int) -> String {
     return weeks[sumOfDay % 7]
 }
 
+/// - 시저 암호
+/// - https://programmers.co.kr/learn/courses/30/lessons/12926
+func solution12926_V1(_ s:String, _ n:Int) -> String {
+    var answer: String = ""
+    for i8Code in s.utf8 {
+        var iCode: Int = Int(i8Code)
+        switch iCode {
+        case 65...90:
+            iCode = (iCode + n - 65) % 26 + 65
+        case 97...122:
+            iCode = (iCode + n - 97) % 26 + 97
+        default:
+            break
+        }
+        
+        answer += String(UnicodeScalar(iCode)!)
+    }
+    
+    return answer
+}
+func solution12926_V2(_ s:String, _ n:Int) -> String {
+    return s.utf8.map {
+        var code = Int($0)
+        switch code {
+            case 65...90:
+                code = (code + n - 65) % 26 + 65
+            case 97...122:
+                code = (code + n - 97) % 26 + 97
+            default:
+                break
+        }
+        return String(UnicodeScalar(code)!)
+    }.joined()
+}
+
+/// - 문자열 내 마음대로 정렬하기
+/// - https://programmers.co.kr/learn/courses/30/lessons/12915?language=swift
+func solution12915(_ strings:[String], _ n:Int) -> [String] {
+    return strings.sorted{
+        let first = $0[$0.index($0.startIndex, offsetBy: n)]
+        let second = $1[$1.index($1.startIndex, offsetBy: n)]
+        
+        if first == second { return $0 < $1 }
+        else { return first < second }
+    }
+}
+
+/// - 이상한 문자 만들기
+/// - https://programmers.co.kr/learn/courses/30/lessons/12930?language=swift
+func solution12930_V1(_ s:String) -> String {
+    var index: Int = 0
+    
+    return s.map { (char: Character) -> String in
+        var str: String = ""
+        if char != " " {
+            if index % 2 == 0 {
+                str = char.uppercased()
+            } else {
+                str = char.lowercased()
+            }
+            index += 1
+        } else {
+            index = 0
+            str = String(char)
+        }
+        return str
+    }.joined()
+}
+func solution12930_V2(_ s:String) -> String {
+    let str = s.components(separatedBy: " ").map { $0.enumerated().map { $0.offset % 2 == 0 ? $0.element.uppercased() : $0.element.lowercased() } }
+    return str.map{ $0.joined() }.joined(separator: " ")
+}
+
+/// - 체육복
+/// - https://programmers.co.kr/learn/courses/30/lessons/42862?language=swift
+func solution42862(_ n:Int, _ lost:[Int], _ reserve:[Int]) -> Int {
+    var reserveAry: [Int] = reserve
+    var lostAry = lost.filter {
+        for i in 0..<reserveAry.count {
+            if $0 == reserveAry[i] {
+                reserveAry[i] = -1
+                return false
+            }
+        }
+        return true
+    }
+    
+    lostAry = lostAry.filter {
+        for i in 0..<reserveAry.count {
+            if $0 == reserveAry[i] - 1 || $0 == reserveAry[i] + 1 {
+                reserveAry[i] = -1
+                return false
+            }
+        }
+        return true
+    }
+    
+    return n - lostAry.count
+}
+
+/// - 크레인 인형뽑기 게임
+/// - https://programmers.co.kr/learn/courses/30/lessons/64061?language=swift
+func solution64061(_ board:[[Int]], _ moves:[Int]) -> Int {
+    var boards: [[Int]] = board
+    var basket: [Int] = []
+    var answer: Int = 0
+    for move in moves {
+        for i in 0..<boards.count {
+            let item: Int = boards[i][move-1]
+            if item > 0 {
+                if !basket.isEmpty && item == basket[basket.count-1] {
+                    basket.popLast()
+                    answer += 2
+                } else {
+                    basket.append(item)
+                }
+                boards[i][move-1] = 0
+                break
+            }
+        }
+    }
+    return answer
+}
+
+/// - 비밀지도
+/// - https://programmers.co.kr/learn/courses/30/lessons/17681?language=swift
+func solution17681(_ n:Int, _ arr1:[Int], _ arr2:[Int]) -> [String] {
+    return zip(arr1, arr2)
+        .map { String(($0|$1), radix: 2) }
+        .map { String(repeating: " ", count: n-$0.count) + $0.map { $0 == "1" ? "#" : " " } }
+}
 
