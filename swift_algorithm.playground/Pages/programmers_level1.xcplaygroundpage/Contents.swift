@@ -508,11 +508,148 @@ func solution64061(_ board:[[Int]], _ moves:[Int]) -> Int {
     return answer
 }
 
-/// - 비밀지도
+/// - [1차] 비밀지도
 /// - https://programmers.co.kr/learn/courses/30/lessons/17681?language=swift
 func solution17681(_ n:Int, _ arr1:[Int], _ arr2:[Int]) -> [String] {
     return zip(arr1, arr2)
         .map { String(($0|$1), radix: 2) }
         .map { String(repeating: " ", count: n-$0.count) + $0.map { $0 == "1" ? "#" : " " } }
+}
+
+/// - 실패율
+/// - https://programmers.co.kr/learn/courses/30/lessons/42889?language=swift
+func solution42889_V1(_ N:Int, _ stages:[Int]) -> [Int] { //시간초과
+    var failureRate: [Double] = []
+    var stageCount: Int = stages.count
+    
+    for num in 1...N {
+        let currentCount = stages.filter { $0 == num }.count
+        failureRate.append(Double(currentCount) / Double(stageCount))
+        stageCount -= currentCount
+    }
+    
+    return failureRate.enumerated().sorted{ $1.element < $0.element }.map { $0.offset+1 }
+}
+func solution42889_V2(_ N:Int, _ stages:[Int]) -> [Int] {
+    var failures: [(count: Int, rate: Double)] = Array(repeating: (0, 0), count: N)
+    
+    for i in 0..<stages.count {
+        let idx = stages[i] - 1
+        if idx < N {
+            failures[idx].count += 1
+        }
+    }
+    
+    var stageCount: Int = stages.count
+    for i in 0..<failures.count {
+        let failCount: Int = failures[i].count
+        failures[i].rate = failCount > 0 ? Double(failCount) / Double(stageCount) : 0
+        stageCount -= failCount
+    }
+    
+    return failures.enumerated()
+        .sorted{ $0.element.rate > $1.element.rate }
+        .map{ $0.offset+1 }
+}
+
+/// - [1차] 다트 게임
+/// - https://programmers.co.kr/learn/courses/30/lessons/17682
+func solution17682(_ dartResult:String) -> Int {
+    var scores: [Int] = [Int](repeating: 0, count: 3)
+    
+    var idx: Int = -1
+    var beforeChar: Character = " "
+    for char in dartResult {
+        switch char {
+        case "0"..."9":
+            if beforeChar == "1" {
+                scores[idx] = 10
+            } else {
+                idx += 1
+                scores[idx] = Int(String(char))!
+            }
+        case "D":
+            scores[idx] = scores[idx] * scores[idx]
+        case "T":
+            scores[idx] = scores[idx] * scores[idx] * scores[idx]
+        case "*":
+            if idx < 1 {
+                scores[idx] *= 2
+            } else {
+                scores[idx-1] *= 2
+                scores[idx] *= 2
+            }
+        case "#":
+            scores[idx] *= -1
+        default:
+            break
+        }
+        beforeChar = char
+    }
+    
+    return scores.reduce(0, +)
+}
+
+/// - [카카오 인턴] 키패드 누르기
+/// - https://programmers.co.kr/learn/courses/30/lessons/67256?language=swift
+func solution67256(_ numbers:[Int], _ hand:String) -> String {
+    let keypad: [[Int]] = [[1,4,7,-1], [2,5,8,0], [3,6,9,-1]]
+    var leftHands: (position: String, keyIndex: Int) = ("L", 3)
+    var rightHands: (position: String, keyIndex: Int) = ("R", 3)
+    
+    var hands: String = ""
+    for key in numbers {
+        switch key {
+        case 1, 4, 7:
+            leftHands = ("L", keypad[0].firstIndex(of: key)!)
+            hands += "L"
+        case 3, 6, 9:
+            rightHands = ("R", keypad[2].firstIndex(of: key)!)
+            hands += "R"
+        default:
+            let midKeyIndex: Int = keypad[1].firstIndex(of: key)!
+            var leftDist = abs(leftHands.keyIndex - midKeyIndex)
+            var rightDist = abs(rightHands.keyIndex - midKeyIndex)
+            leftDist = leftHands.position == "M" ? leftDist - 1 : leftDist
+            rightDist = rightHands.position == "M" ? rightDist - 1 : rightDist
+            
+            var midHand: String = ""
+            if leftDist < rightDist {
+                midHand = "L"
+            } else if leftDist > rightDist {
+                midHand = "R"
+            } else {
+                midHand = hand == "left" ? "L" : "R"
+            }
+            
+            if midHand == "L" {
+                leftHands = ("M", midKeyIndex)
+            } else {
+                rightHands = ("M", midKeyIndex)
+            }
+            
+            hands += midHand
+        }
+    }
+    
+    return hands
+}
+
+
+/// - 피보나치 수
+/// - https://programmers.co.kr/learn/courses/30/lessons/12945?language=swift
+func solution12945(_ n:Int) -> Int {
+    var f1: Int = 0
+    var f2: Int = 1
+    
+    if n > 1 {
+        for _ in 2...n {
+            let f = f1 + f2
+            f1 = f2
+            f2 = f % 1234567
+        }
+    }
+    
+    return f2
 }
 
