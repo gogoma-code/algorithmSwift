@@ -653,3 +653,28 @@ func solution12945(_ n:Int) -> Int {
     return f2
 }
 
+/// - 큰 수 만들기
+/// - https://programmers.co.kr/learn/courses/30/lessons/42883?language=swift
+func solution42883(_ number:String, _ k:Int) -> String {
+    var k = k
+    var numbers: [String] = []
+    
+    for (idx, ele) in number.enumerated() {
+        let el = String(ele)
+        while k > 0, !numbers.isEmpty, numbers.last! < el {
+            numbers.removeLast()
+            k -= 1
+        }
+        
+        if k > 0 {
+            numbers.append(el)
+        } else {
+            numbers.append(contentsOf: number[number.index(number.startIndex, offsetBy: idx)...].map{ String($0) })
+            break
+        }
+    }
+    
+    let idx = numbers.index(numbers.startIndex, offsetBy: numbers.count - k)
+    return numbers[..<idx].joined()
+}
+
