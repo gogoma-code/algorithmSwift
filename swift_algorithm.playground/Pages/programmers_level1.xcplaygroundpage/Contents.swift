@@ -678,3 +678,31 @@ func solution42883(_ number:String, _ k:Int) -> String {
     return numbers[..<idx].joined()
 }
 
+/// - 최댓값과 최솟값
+/// - https://programmers.co.kr/learn/courses/30/lessons/12939?language=swift
+func solution12939(_ s:String) -> String {
+    let ansArr: [Int] = s.split(separator: " ").compactMap{ Int($0) }.sorted{ $0 < $1 }
+    return "\(ansArr[0]) \(ansArr[ansArr.count-1])"
+}
+
+/// - N개의 최소공배수
+/// - https://programmers.co.kr/learn/courses/30/lessons/12953?language=swift
+/*
+func solution12953_V1(_ arr:[Int]) -> Int {
+    var lcmVal: Int = arr[0]
+    for i in 1..<arr.count {
+        lcmVal = lcm(lcmVal, arr[i])
+    }
+    return lcmVal
+}
+func solution12953_V2(_ arr:[Int]) -> Int {
+    return arr.reduce(1, {lcm($0, $1)})
+}
+func gcd(_ n:Int, _ m:Int) -> Int {
+    return m == 0 ? n : gcd(m, n % m)
+}
+func lcm(_ n:Int, _ m:Int) -> Int {
+    return n * m / gcd(n, m)
+}
+*/
+
