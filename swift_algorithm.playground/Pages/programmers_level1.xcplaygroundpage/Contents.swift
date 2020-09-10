@@ -1,4 +1,3 @@
-import SwiftUI
 import Foundation
 
 /// - 문자열 다루기 기본
@@ -634,75 +633,4 @@ func solution67256(_ numbers:[Int], _ hand:String) -> String {
     
     return hands
 }
-
-
-/// - 피보나치 수
-/// - https://programmers.co.kr/learn/courses/30/lessons/12945?language=swift
-func solution12945(_ n:Int) -> Int {
-    var f1: Int = 0
-    var f2: Int = 1
-    
-    if n > 1 {
-        for _ in 2...n {
-            let f = f1 + f2
-            f1 = f2
-            f2 = f % 1234567
-        }
-    }
-    
-    return f2
-}
-
-/// - 큰 수 만들기
-/// - https://programmers.co.kr/learn/courses/30/lessons/42883?language=swift
-func solution42883(_ number:String, _ k:Int) -> String {
-    var k = k
-    var numbers: [String] = []
-    
-    for (idx, ele) in number.enumerated() {
-        let el = String(ele)
-        while k > 0, !numbers.isEmpty, numbers.last! < el {
-            numbers.removeLast()
-            k -= 1
-        }
-        
-        if k > 0 {
-            numbers.append(el)
-        } else {
-            numbers.append(contentsOf: number[number.index(number.startIndex, offsetBy: idx)...].map{ String($0) })
-            break
-        }
-    }
-    
-    let idx = numbers.index(numbers.startIndex, offsetBy: numbers.count - k)
-    return numbers[..<idx].joined()
-}
-
-/// - 최댓값과 최솟값
-/// - https://programmers.co.kr/learn/courses/30/lessons/12939?language=swift
-func solution12939(_ s:String) -> String {
-    let ansArr: [Int] = s.split(separator: " ").compactMap{ Int($0) }.sorted{ $0 < $1 }
-    return "\(ansArr[0]) \(ansArr[ansArr.count-1])"
-}
-
-/// - N개의 최소공배수
-/// - https://programmers.co.kr/learn/courses/30/lessons/12953?language=swift
-/*
-func solution12953_V1(_ arr:[Int]) -> Int {
-    var lcmVal: Int = arr[0]
-    for i in 1..<arr.count {
-        lcmVal = lcm(lcmVal, arr[i])
-    }
-    return lcmVal
-}
-func solution12953_V2(_ arr:[Int]) -> Int {
-    return arr.reduce(1, {lcm($0, $1)})
-}
-func gcd(_ n:Int, _ m:Int) -> Int {
-    return m == 0 ? n : gcd(m, n % m)
-}
-func lcm(_ n:Int, _ m:Int) -> Int {
-    return n * m / gcd(n, m)
-}
-*/
 
