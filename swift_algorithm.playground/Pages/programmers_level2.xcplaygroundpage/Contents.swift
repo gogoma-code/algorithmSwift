@@ -91,7 +91,7 @@ func solution12941_V2(_ A:[Int], _ B:[Int]) -> Int
 
 /// - 행렬의 곱셈
 /// - https://programmers.co.kr/learn/courses/30/lessons/12949?language=swift
-func solution(_ arr1:[[Int]], _ arr2:[[Int]]) -> [[Int]] {
+func solution12949(_ arr1:[[Int]], _ arr2:[[Int]]) -> [[Int]] {
     var arr: [[Int]] = Array(repeating: Array(repeating: 0, count: arr2[0].count), count: arr1.count)
     
     for i in 0..<arr.count {
@@ -114,5 +114,86 @@ func solution42747(_ citations:[Int]) -> Int {
         maxVal = max(maxVal, min(sorted[i], sorted.count-i))
     }
     return maxVal
+}
+
+/// - 다음 큰 숫자
+/// - https://programmers.co.kr/learn/courses/30/lessons/12911?language=swift
+func solution12911_V1(_ n:Int) -> Int {
+    let oneCount: Int = String(n, radix: 2).filter {$0 == "1"}.count
+    var num: Int = n + 1
+    while oneCount != String(num, radix: 2).filter({$0 == "1"}).count {
+        num += 1
+    }
+    
+    return num
+}
+func solution12911_V2(_ n:Int) -> Int {
+    var num: Int = n + 1
+    while n.nonzeroBitCount != num.nonzeroBitCount {
+        num += 1
+    }
+    
+    return num
+}
+
+/// - 위장
+/// - https://programmers.co.kr/learn/courses/30/lessons/42578?language=swift
+func solution42578_V1(_ clothes:[[String]]) -> Int {
+    var clothDic: [String:Int] = [:]
+    for cloth in clothes {
+        clothDic.updateValue((clothDic[cloth[1]] == nil ? 1 : clothDic[cloth[1]]! + 1), forKey: cloth[1])
+    }
+
+    var answer: Int = 1
+    for value in clothDic.values {
+        answer *= value + 1
+    }
+    return answer - 1
+}
+func solution42578_V2(_ clothes:[[String]]) -> Int {
+    var clothDic: [String:Int] = [:]
+    for cloth in clothes {
+        clothDic.updateValue((clothDic[cloth[1]] == nil ? 2 : clothDic[cloth[1]]! + 1), forKey: cloth[1])
+    }
+    
+    return clothDic.values.reduce(1, {$0 * $1}) - 1
+}
+func solution42578_V3(_ clothes:[[String]]) -> Int {
+    let counts = Set(clothes.compactMap({ $0[1] })).map {category in
+        return clothes.filter{$0[1] == category}.count + 1
+    }
+    
+    return counts.reduce(1,  { $0 * $1 }) - 1
+}
+
+/// - 가장 큰 수
+/// -  https://programmers.co.kr/learn/courses/30/lessons/42746?language=swift
+func solution42746(_ numbers:[Int]) -> String {
+    let answer: String = numbers.map{String($0)}.sorted {$0+$1 > $1+$0}.joined()
+    return answer.first == "0" ? "0" : answer
+}
+
+/// - 스킬트리
+/// - https://programmers.co.kr/learn/courses/30/lessons/49993?language=swift
+func solution49993(_ skill:String, _ skill_trees:[String]) -> Int {
+    var count = skill_trees.count
+    
+    for skills in skill_trees {
+        var before: String.Index = skills.startIndex
+        var beforeFlag: Bool = true
+        for skillChar in skill {
+            if let current = skills.firstIndex(of: skillChar) {
+                if skills.distance(from: before, to: current) < 0 || !beforeFlag {
+                    count -= 1
+                    break
+                }
+                before = current
+            } else {
+                beforeFlag = false
+            }
+        }
+    }
+    
+    return count
 }
 
