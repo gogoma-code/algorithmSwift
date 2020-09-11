@@ -197,3 +197,48 @@ func solution49993(_ skill:String, _ skill_trees:[String]) -> Int {
     return count
 }
 
+/// - 기능개발
+/// - https://programmers.co.kr/learn/courses/30/lessons/42586?language=swift
+func solution42586(_ progresses:[Int], _ speeds:[Int]) -> [Int] {
+    let workDays: [Int] = progresses.enumerated().map { (p) -> Int in
+        let dayCnt = (100-p.element) / speeds[p.offset]
+        return (100-p.element) % speeds[p.offset] == 0 ? dayCnt : dayCnt + 1
+    }
+    
+    var distributeArr: [Int] = []
+    var distributeCnt: Int = 0
+    var workMax: Int = workDays.first!
+    for i in 0..<workDays.count {
+        if workMax < workDays[i] {
+            distributeArr.append(distributeCnt)
+            workMax = workDays[i]
+            distributeCnt = 0
+        }
+        
+        distributeCnt += 1
+    }
+    distributeArr.append(distributeCnt)
+    
+    return distributeArr
+}
+
+/// - 프린터
+/// - https://programmers.co.kr/learn/courses/30/lessons/42587?language=swift
+func solution42587(_ priorities:[Int], _ location:Int) -> Int {
+    var priority: [(Int,Int)] = priorities.enumerated().map {($0.offset, $0.element)}
+    var printing: Int = 0
+    
+    while !priority.isEmpty {
+        let pri: (Int, Int) = priority.remove(at: 0)
+        if !priority.filter({pri.1 < $0.1}).isEmpty {
+            priority.append(pri)
+        } else if pri.0 == location {
+            printing = priorities.count - priority.count
+            break
+        }
+    }
+    
+    return printing
+}
+
+
