@@ -241,4 +241,32 @@ func solution42587(_ priorities:[Int], _ location:Int) -> Int {
     return printing
 }
 
+/// - 문자열 압축
+/// - https://programmers.co.kr/learn/courses/30/lessons/60057?language=swift
+func solution60057(_ s:String) -> Int {
+    let sArr: [String] = s.map {String($0)}
+    var comStr: String = s
+    
+    for modZero in 1..<sArr.count {
+        var idx: Int = 0
+        var val: (count: Int, str: String) = (1, "")
+        var tmpStr: String = ""
+        
+        while idx < sArr.count {
+            let cur: String = idx+modZero < sArr.count ? sArr[idx..<idx+modZero].joined() : sArr[idx..<sArr.count].joined()
+            if cur == val.str {
+                val.count = val.count + 1
+            } else {
+                tmpStr += (val.count > 1 ? String(val.count) : "") + val.str
+                val = (1, cur)
+            }
+            idx += modZero
+        }
+        tmpStr += (val.count > 1 ? String(val.count) : "") + val.str
+        comStr = tmpStr.count < comStr.count ? tmpStr : comStr
+    }
+    
+    return comStr.count
+}
+
 
