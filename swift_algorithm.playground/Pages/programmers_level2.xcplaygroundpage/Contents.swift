@@ -269,4 +269,32 @@ func solution60057(_ s:String) -> Int {
     return comStr.count
 }
 
+/// - 오픈채팅방
+/// - https://programmers.co.kr/learn/courses/30/lessons/42888?language=swift
+func solution42888(_ record:[String]) -> [String] {
+    var result: [(String, String)] = []
+    var nicknames: [String:String] = [:]
+    
+    for r in record {
+        let rSplit = r.split(separator: " ")
+        let re = (String(rSplit[0]), String(rSplit[1]))
+        
+        switch re.0 {
+        case "Enter":
+            result.append((re.1, "님이 들어왔습니다."))
+            nicknames.updateValue(String(rSplit[2]), forKey: re.1)
+            break
+        case "Change":
+            nicknames.updateValue(String(rSplit[2]), forKey: re.1)
+            break
+        case "Leave":
+            result.append((re.1, "님이 나갔습니다."))
+            break
+        default:
+            break
+        }
+    }
+    
+    return result.map { nicknames[$0.0]! + $0.1 }
+}
 
