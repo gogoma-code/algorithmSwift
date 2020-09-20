@@ -298,3 +298,26 @@ func solution42888(_ record:[String]) -> [String] {
     return result.map { nicknames[$0.0]! + $0.1 }
 }
 
+/// - 다리를 지나는 트럭
+/// - https://programmers.co.kr/learn/courses/30/lessons/42583?language=swift
+func solution42583(_ bridge_length:Int, _ weight:Int, _ truck_weights:[Int]) -> Int {
+    var timesAndWeights: [(Int, Int)] = []
+    var i: Int = 0, sum: Int = 0, time: Int = 0
+    while true {
+        if !timesAndWeights.isEmpty && timesAndWeights.first!.1 == time {
+            sum = sum - timesAndWeights.removeFirst().0
+        }
+        
+        if i < truck_weights.count && sum + truck_weights[i] <= weight {
+            sum += truck_weights[i]
+            timesAndWeights.append((truck_weights[i], time + bridge_length))
+            i += 1
+        }
+        
+        time += 1
+        if timesAndWeights.isEmpty { break }
+    }
+    
+    return time
+}
+
