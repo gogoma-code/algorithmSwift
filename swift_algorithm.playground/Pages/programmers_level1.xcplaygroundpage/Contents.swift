@@ -634,3 +634,15 @@ func solution67256(_ numbers:[Int], _ hand:String) -> String {
     return hands
 }
 
+/// - 두 개 뽑아서 더하기
+/// - https://programmers.co.kr/learn/courses/30/lessons/68644?language=swift
+func solution68644(_ numbers:[Int]) -> [Int] {
+    var set: Set<Int> = []
+    for i in 0..<numbers.count {
+        for j in i+1..<numbers.count {
+            set.insert(numbers[i] + numbers[j])
+        }
+    }
+    
+    return set.sorted()
+}
