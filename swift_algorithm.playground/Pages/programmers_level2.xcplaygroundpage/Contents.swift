@@ -321,3 +321,35 @@ func solution42583(_ bridge_length:Int, _ weight:Int, _ truck_weights:[Int]) -> 
     return time
 }
 
+/// - 타겟 넘버
+/// - https://programmers.co.kr/learn/courses/30/lessons/43165?language=swift
+func solution43165_V1(_ numbers:[Int], _ target:Int) -> Int {
+    func dfs(_ node: Int, _ sum: Int) -> Int {
+        if(node == numbers.count) { return sum == target ? 1 : 0}
+        return dfs(node+1, sum + numbers[node]) + dfs(node+1, sum - numbers[node])
+    }
+    
+    return dfs(0, 0)
+}
+func solution43165_V2(_ numbers:[Int], _ target:Int) -> Int {
+    func bfs() -> Int {
+        var answer: Int = 0
+        var tupleAry: [(Int, Int)] = []
+        tupleAry.append((numbers[0], 0))
+        tupleAry.append((-numbers[0], 0))
+        
+        while(!tupleAry.isEmpty) {
+            let tuple: (Int, Int) = tupleAry.removeFirst()
+            if tuple.1 == numbers.count-1 {
+                if tuple.0 == target { answer += 1 }
+            } else {
+                tupleAry.append((tuple.0 + numbers[tuple.1 + 1], tuple.1 + 1))
+                tupleAry.append((tuple.0 - numbers[tuple.1 + 1], tuple.1 + 1))
+            }
+        }
+        
+        return answer
+    }
+    
+    return bfs()
+}
