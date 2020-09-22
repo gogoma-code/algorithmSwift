@@ -353,3 +353,36 @@ func solution43165_V2(_ numbers:[Int], _ target:Int) -> Int {
     
     return bfs()
 }
+
+/// - 소수 찾기
+/// - https://programmers.co.kr/learn/courses/30/lessons/42839?language=swift
+func solution42839(_ numbers:String) -> Int {
+    var set: Set<Int> = []
+    
+    func permutation(_ prefix: String, _ str: String, _ set: inout Set<Int> ) {
+        let len: Int = str.count
+        if prefix != "" {
+            set.insert(Int(prefix)!)
+        }
+        for i in 0..<len {
+            let idx = str.index(str.startIndex, offsetBy: i)
+            let idx2 = str.index(str.startIndex, offsetBy: i+1)
+            permutation(prefix + String(str[idx]), String(str[str.startIndex..<idx]) + str[idx2..<str.endIndex], &set)
+        }
+    }
+    func isPrime(_ num: Int) -> Bool {
+        if num < 3 {
+            return num == 2 ? true : false
+        } else {
+            for i in 2..<num {
+                if num % i == 0 {
+                    return false
+                }
+            }
+        }
+        return true
+    }
+    
+    permutation("", numbers, &set)
+    return set.filter{ isPrime($0) }.count
+}
