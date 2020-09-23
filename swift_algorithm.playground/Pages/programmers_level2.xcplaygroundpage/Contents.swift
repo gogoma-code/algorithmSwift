@@ -386,3 +386,21 @@ func solution42839(_ numbers:String) -> Int {
     permutation("", numbers, &set)
     return set.filter{ isPrime($0) }.count
 }
+
+/// - 카펫
+/// - https://programmers.co.kr/learn/courses/30/lessons/42842?language=swift
+func solution42842(_ brown:Int, _ yellow:Int) -> [Int] {
+    var y: Int = 3
+    var x: Int = (brown + yellow) / y
+    
+    while true {
+        if (x-2) * (y-2) == yellow {
+            break
+        }
+        y += 1
+        x = (brown + yellow) / y
+    }
+    
+    return [x, y]
+}
+
