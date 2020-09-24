@@ -404,3 +404,90 @@ func solution42842(_ brown:Int, _ yellow:Int) -> [Int] {
     return [x, y]
 }
 
+/// - 올바른 괄호
+/// - https://programmers.co.kr/learn/courses/30/lessons/12909?language=swift
+func solution12909(_ s:String) -> Bool {
+    var cnt: Int = 0
+    
+    for char in s {
+        switch char {
+        case "(":
+            cnt += 1
+        case ")":
+            cnt -= 1
+        default:
+            break
+        }
+        
+        if cnt < 0 {
+            break
+        }
+    }
+    
+    return cnt == 0
+}
+
+/// - 괄호 변환
+/// - https://programmers.co.kr/learn/courses/30/lessons/60058?language=swift
+func solution(_ p:String) -> String {
+    func isCorrect(_ s:String) -> Bool {
+        var cnt: Int = 0
+        
+        for char in s {
+            switch char {
+            case "(":
+                cnt += 1
+            case ")":
+                cnt -= 1
+            default:
+                break
+            }
+            
+            if cnt < 0 {
+                break
+            }
+        }
+        
+        return cnt == 0
+    }
+    
+    func conversion(_ w: String) -> String {
+        if w == "" { return "" }
+        
+        var result: String = "", u: String = ""
+        var cnt: Int = 0
+        
+        for i in 0..<w.count {
+            let str: String = String(w[w.index(w.startIndex, offsetBy: i)])
+            u += str
+            switch str {
+            case "(":
+                cnt += 1
+            case ")":
+                cnt -= 1
+            default:
+                break
+            }
+            
+            if cnt == 0 {
+                let idx: String.Index = w.index(w.startIndex, offsetBy: i+1)
+                let v: String = String(w[idx..<w.endIndex])
+                if isCorrect(u) {
+                    result += u
+                    result += conversion(v)
+                } else {
+                    u = String(u[u.index(u.startIndex, offsetBy: 1)..<u.endIndex])
+                    u = String(u[u.startIndex..<u.index(u.startIndex, offsetBy: u.count-1)])
+                    u = u.replacingOccurrences(of: "(", with: "#")
+                        .replacingOccurrences(of: ")", with: "(")
+                        .replacingOccurrences(of: "#", with: ")")
+                    result += "(" + conversion(v) + ")" + u
+                }
+                break
+            }
+        }
+        
+        return result
+    }
+    return conversion(p)
+}
