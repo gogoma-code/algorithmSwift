@@ -529,5 +529,22 @@ func solution12951(_ s:String) -> String {
     return answer
 }
 
-
+/// - 짝지어 제거하기
+/// - https://programmers.co.kr/learn/courses/30/lessons/12973?language=swift
+func solution12973(_ s:String) -> Int{
+    var stack: [Character] = []
+    for ch in s {
+        if stack.isEmpty {
+            stack.append(ch)
+        } else {
+            if stack.last! == ch {
+                stack.popLast()
+            } else {
+                stack.append(ch)
+            }
+        }
+    }
+    
+    return stack.isEmpty ? 1 : 0
+}
 
