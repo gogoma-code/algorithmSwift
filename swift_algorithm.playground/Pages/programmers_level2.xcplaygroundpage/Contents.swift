@@ -429,7 +429,7 @@ func solution12909(_ s:String) -> Bool {
 
 /// - 괄호 변환
 /// - https://programmers.co.kr/learn/courses/30/lessons/60058?language=swift
-func solution(_ p:String) -> String {
+func solution60058(_ p:String) -> String {
     func isCorrect(_ s:String) -> Bool {
         var cnt: Int = 0
         
@@ -491,3 +491,30 @@ func solution(_ p:String) -> String {
     }
     return conversion(p)
 }
+
+/// - [3차] n진수 게임
+/// - https://programmers.co.kr/learn/courses/30/lessons/17687?language=swift
+func solution(_ n:Int, _ t:Int, _ m:Int, _ p:Int) -> String {
+    var conversionResult: [Character] = []
+    let tMulm: Int = t * m
+    
+    var num: Int = 0
+    while conversionResult.count < tMulm {
+        let radix = String(num, radix: n)
+        radix.forEach { conversionResult.append($0) }
+        num += 1
+    }
+    
+    var answer: String = ""
+    var i: Int = p-1
+    while answer.count < t {
+        answer.append(conversionResult[i])
+        i += m
+    }
+    
+    return answer.uppercased()
+}
+
+solution(2, 4, 2, 1)
+solution(16, 16, 2, 1)
+solution(16, 16, 2, 2)
