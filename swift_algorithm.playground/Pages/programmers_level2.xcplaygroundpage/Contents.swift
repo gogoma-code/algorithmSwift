@@ -494,7 +494,7 @@ func solution60058(_ p:String) -> String {
 
 /// - [3차] n진수 게임
 /// - https://programmers.co.kr/learn/courses/30/lessons/17687?language=swift
-func solution(_ n:Int, _ t:Int, _ m:Int, _ p:Int) -> String {
+func solution17687(_ n:Int, _ t:Int, _ m:Int, _ p:Int) -> String {
     var conversionResult: [Character] = []
     let tMulm: Int = t * m
     
@@ -515,6 +515,3 @@ func solution(_ n:Int, _ t:Int, _ m:Int, _ p:Int) -> String {
     return answer.uppercased()
 }
 
-solution(2, 4, 2, 1)
-solution(16, 16, 2, 1)
-solution(16, 16, 2, 2)
