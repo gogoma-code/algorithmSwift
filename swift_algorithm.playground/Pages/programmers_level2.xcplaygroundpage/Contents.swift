@@ -515,3 +515,19 @@ func solution17687(_ n:Int, _ t:Int, _ m:Int, _ p:Int) -> String {
     return answer.uppercased()
 }
 
+/// - JadenCase 문자열 만들기
+/// - https://programmers.co.kr/learn/courses/30/lessons/12951?language=swift
+func solution12951(_ s:String) -> String {
+    let str: [String] = s.lowercased().map{String($0)}
+    var answer: String = ""
+    var flag: Bool = true
+    for char in str {
+        answer.append(flag ? char.uppercased() : char)
+        flag = char == " " ? true : false
+    }
+    
+    return answer
+}
+
+
+
