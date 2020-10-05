@@ -548,3 +548,102 @@ func solution12973(_ s:String) -> Int{
     return stack.isEmpty ? 1 : 0
 }
 
+/// - 가장 큰 정사각형 찾기
+/// - https://programmers.co.kr/learn/courses/30/lessons/12905?language=swift
+func solution12905(_ board:[[Int]]) -> Int {
+    var boards = board
+    var max: Int = 0, size: Int = 0
+    for i in 0..<boards.count {
+        for j in 0..<boards[i].count {
+            if board[i][j] == 1 {
+                size = 1
+                if i != 0, j != 0 {
+                    boards[i][j] = min(boards[i-1][j-1], min(boards[i-1][j], boards[i][j-1])) + 1
+                    size = boards[i][j]
+                }
+                
+                max = (max < size) ? size : max
+            }
+        }
+    }
+    
+    return max * max
+}
+
+/// - 튜플
+/// - https://programmers.co.kr/learn/courses/30/lessons/64065?language=swift
+func solution64065(_ s:String) -> [Int] {
+    let strAry = s.map { (c) -> String in
+        if c == "{" || c == "}" { return " " }
+        else { return String(c) }
+    }.joined()
+    .trimmingCharacters(in: .whitespaces)
+    .components(separatedBy: " , ")
+    .sorted{$0.count < $1.count}
+    
+    var set: Set<Int> = []
+    var answer: [Int] = []
+    for str in strAry {
+        for strSplit in str.split(separator: ",") {
+            if(set.insert(Int(strSplit)!).inserted) {
+                answer.append(Int(strSplit)!)
+            }
+        }
+    }
+    
+    return answer
+}
+
+/// - 영어 끝말잇기
+/// - https://programmers.co.kr/learn/courses/30/lessons/12981?language=swift
+func solution12981(_ n:Int, _ words:[String]) -> [Int] {
+    var set: Set<String> = []
+    var lastword: String = ""
+    var cnt = 1
+    for word in words {
+        if !set.insert(word).inserted {
+            break
+        }
+        if lastword != "", lastword.last! != word.first! {
+            break
+        }
+        
+        lastword = word
+        cnt += 1
+    }
+    
+    var num = 0, turn = 0
+    if words.count != set.count {
+        num = (cnt % n == 0) ? n : cnt % n
+        turn = (cnt % n == 0) ? cnt / n : cnt / n + 1
+    }
+    
+    return [num, turn]
+}
+
+/// - [1차] 캐시
+/// - https://programmers.co.kr/learn/courses/30/lessons/17680?language=swift
+func solution17680(_ cacheSize:Int, _ cities:[String]) -> Int {
+    if cacheSize == 0 {
+        return cities.count * 5
+    }
+    
+    var cache: [String] = []
+    var time : Int = 0
+    for city in cities.map({ String($0.lowercased()) }) {
+        if let idx = cache.firstIndex(of: city) {
+            cache.remove(at: idx)
+            time += 1
+        } else {
+            if cache.count >= cacheSize {
+                cache.removeFirst()
+            }
+            time += 5
+        }
+        cache.append(city)
+    }
+    
+    return time
+}
+
+
