@@ -646,4 +646,56 @@ func solution17680(_ cacheSize:Int, _ cities:[String]) -> Int {
     return time
 }
 
+/// - 멀쩡한 사각형
+/// - https://programmers.co.kr/learn/courses/30/lessons/62048?language=swift
+func solution62048(_ w:Int, _ h:Int) -> Int64{
+    func gcd(_ n:Int64, _ m:Int64) -> Int64 {
+        return m == 0 ? n : gcd(m, n % m)
+    }
+    
+    let ww: Int64 = Int64(w)
+    let hh: Int64 = Int64(h)
+    return ww * hh - (ww + hh - gcd(ww, hh))
+}
+
+/// - [1차] 프렌즈4블록
+/// - https://programmers.co.kr/learn/courses/30/lessons/17679?language=swift
+func solution17679(_ m:Int, _ n:Int, _ board:[String]) -> Int {
+    var boards: [[String]] = []
+    for b in board { boards.append(b.map{String($0)}) }
+    var cnt: Int = 0
+    
+    while true {
+        var flag: Bool = false
+        var flagBoards: [[Bool]] = Array(repeating: Array(repeating: false, count: n), count: m)
+        for i in 0..<m {
+            for j in 0..<n {
+                if i != 0, j != 0 {
+                    let b: String = boards[i][j]
+                    if(b != " " && b == boards[i-1][j-1] && b == boards[i-1][j] && b == boards[i][j-1]) {
+                        flag = true
+                        flagBoards[i][j] = true; flagBoards[i-1][j-1] = true;
+                        flagBoards[i-1][j] = true; flagBoards[i][j-1] = true;
+                    }
+                }
+            }
+        }
+        
+        if !flag { break }
+        
+        for i in 0..<m {
+            for j in 0..<n {
+                if flagBoards[i][j] {
+                    cnt += 1
+                    for k in stride(from: i, through: 1, by: -1) {
+                        boards[k][j] = boards[k-1][j]
+                        boards[k-1][j] = " "
+                    }
+                }
+            }
+        }
+    }
+    
+    return cnt
+}
 
