@@ -716,3 +716,19 @@ func solution12985(_ n:Int, _ a:Int, _ b:Int) -> Int {
     return cnt
 }
 
+/// - 점프와 순간 이동
+/// - https://programmers.co.kr/learn/courses/30/lessons/12980?language=swift
+func solution12980(_ n:Int) -> Int {
+    var nn: Int = n
+    var ans: Int = 1
+    
+    while nn != 1 {
+        if nn % 2 != 0 {
+            ans += 1
+        }
+        nn /= 2
+    }
+    
+    return ans
+}
+
