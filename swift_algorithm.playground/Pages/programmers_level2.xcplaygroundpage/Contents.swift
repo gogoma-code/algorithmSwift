@@ -808,3 +808,56 @@ func solution42860(_ name:String) -> Int {
     return controlCnt
 }
 
+/// - [1차] 뉴스 클러스터링
+/// - https://programmers.co.kr/learn/courses/30/lessons/17677?language=swift
+func solution17677(_ str1:String, _ str2:String) -> Int {
+    func checkString(str:String) -> Bool {
+        let filter: String = "[a-z]"
+        let regex = try! NSRegularExpression(pattern: filter, options: [])
+        let list = regex.matches(in:str, options: [], range:NSRange.init(location: 0, length:str.count))
+        if(list.count != str.count){
+            return false
+        }
+        return true
+    }
+    
+    let strAry1: [String] = str1.lowercased().map { String($0) }
+    let strAry2: [String] = str2.lowercased().map { String($0) }
+    var list1: [String] = []
+    var list2: [String] = []
+    
+    for i in 0..<strAry1.count-1 {
+        let str: String = strAry1[i] + strAry1[i+1]
+        if checkString(str: str) {
+            list1.append(str)
+        }
+    }
+    for i in 0..<strAry2.count-1 {
+        let str: String = strAry2[i] + strAry2[i+1]
+        if checkString(str: str) {
+            list2.append(str)
+        }
+    }
+    
+    var answer: Int = 0
+    if list1.isEmpty && list2.isEmpty {
+        answer = 65536
+    } else {
+        let list1Cnt: Int = list1.count
+        for str in list2 {
+            if list1.contains(str) {
+                if let idx = list1.firstIndex(of: str) {
+                    list1.remove(at: idx)
+                }
+            }
+        }
+        let intersectCnt: Int = list1Cnt - list1.count
+        let unionCnt: Int = list1Cnt + list2.count - intersectCnt
+        
+        answer = Int((Double(intersectCnt) / Double(unionCnt)) * 65536)
+    }
+    
+    return answer
+}
+
+
