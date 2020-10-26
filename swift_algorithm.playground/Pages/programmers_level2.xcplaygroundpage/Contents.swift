@@ -732,3 +732,79 @@ func solution12980(_ n:Int) -> Int {
     return ans
 }
 
+/// - 소수 만들기
+/// - https://programmers.co.kr/learn/courses/30/lessons/12977?language=swift
+func solution12977(_ nums:[Int]) -> Int {
+    func isPrime(_ num: Int) -> Bool {
+        if num < 3 {
+            return num == 2 ? true : false
+        } else {
+            for i in 2..<num {
+                if num % i == 0 {
+                    return false
+                }
+            }
+        }
+        return true
+    }
+    
+    var answer: Int = 0
+    for i in 0..<nums.count-2 {
+        for j in i+1..<nums.count-1 {
+            for k in j+1..<nums.count {
+                if isPrime(nums[i] + nums[j] + nums[k]) {
+                    answer += 1
+                }
+            }
+        }
+    }
+    
+    return answer
+}
+
+/// - 조이스틱
+/// - https://programmers.co.kr/learn/courses/30/lessons/42860?language=swift
+func solution42860(_ name:String) -> Int {
+    func findPos(_ visit: [Bool], _ names: [Character], _ idx: Int) -> (Int, Int) {
+        var pos: Int = 0, move: Int = 0
+        var left: Int = idx
+        var right: Int = idx
+        while true {
+            left = left - 1 < 0 ? names.count - 1 : left - 1
+            right = right + 1 < names.count ? right + 1 : right
+            move += 1
+            if left == idx {
+                pos = -1
+                break
+            }
+            if !visit[right], names[right] != "A" {
+                pos = right
+                break
+            }
+            if !visit[left], names[left] != "A" {
+                pos = left
+                break
+            }
+        }
+        return (pos, move)
+    }
+    
+    let names: [Character] = name.map{$0}
+    var visit: [Bool] = Array(repeating: false, count: names.count)
+    var posAndMove: (idx: Int, move: Int) = (0, 0)
+    var controlCnt: Int = 0
+    
+    while true {
+        if posAndMove.idx == -1 { break }
+        
+        let asciiVal: Int = Int(names[posAndMove.0].asciiValue!)
+        controlCnt += min(abs(65 - asciiVal), abs(90-asciiVal) + 1)
+        controlCnt += posAndMove.move
+        visit[posAndMove.idx] = true
+        
+        posAndMove = findPos(visit, names, posAndMove.idx)
+    }
+    
+    return controlCnt
+}
+
